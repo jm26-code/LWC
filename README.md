@@ -1,4 +1,3 @@
-//--- LWC ---
 LWC es una copia sencilla, escrita en leguaje 'C', del aplicativo de GNU-linux wc. Dicho lo cual, se  puede ver que este, lee un archivo y visualiza:
 El numero de LINEAS, PALABRAS y CARACTERES.
 Por el momento solo aplica para solo un archivo.
