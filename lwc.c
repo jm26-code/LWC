@@ -1,61 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 int main(int argc, char* argv[]){
 	puts("** LWC PROGRAM **");
 
-	//conteo
-	int caracteres = 0;
-	int palabras = 0;
-	int lineas = 0;
+	//Values to be found
+	int characters = 0;
+	int words = 0;
+	int lines = 0;
 
-	//Toma un argumento de la LINEA DE COMANDOS
+	//Takes a command-line argument
 	if(argc < 2){
 		puts("No input file");
 		return 1;
 	}
 	
-	//lee un archivo
+	//File
 	FILE* fp;
 
 	if((fp = fopen(argv[1], "r")) != NULL){
 
-		//lee caracter por caracter
-		int actual = 0;
-		char anterior = 0;
+		//Chars values
+		int current = 0;
+		char previous = 0;
 
-		//caracteres especiales
-		char espacio = ' ';
-		char tabulador = '\t';
-		char fin = '\n';
-	
-		while ((actual = fgetc(fp)) != EOF){
+		//End of the line
+		char endLine = '\n';
+		
+		//Read file
+		while ((current = fgetc(fp)) != EOF){
 
-			if(actual == fin)
-				lineas++;
+			//Line by line
+			if(current == endLine)
+				lines++;
 
-			if(actual > 0 && (actual == espacio || actual == tabulador || actual == fin)){
-				if(anterior != espacio && anterior != tabulador && anterior != fin && anterior > 0)
-					palabras++;
+			//Every word
+			if(isspace(current)){
+				if(!isspace(previous) && previous > 0)
+					words++;
 			}
+			previous = current;
 
-			anterior = actual;
-			caracteres++;
+			//Character count
+			characters++; 
 		}
 
-		if(anterior > 0 && anterior != espacio && anterior != tabulador && anterior != fin){
-			palabras++;
+		//Word without a line break
+		if(previous > 0 && !isspace(previous)){
+			words++;
 		}
 
-		//Cerramos el archivo
+		//Close file
 		fclose(fp);
 	}else{
-		perror("Error de archivo");
+		perror("File");
 		return 1;
 	}
 
-	//VISUALIZAR
-	printf("%d\t%d\t%d\n", lineas, palabras, caracteres);
+	//Values found
+	printf("%d\t%d\t%d\n", lines, words, characters);
 
 	return 0;
 }
